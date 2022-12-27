@@ -5,6 +5,8 @@ from datetime import datetime,date
 mega = Mega()
 
 today = date.today()
+
+Filename = f'{today}.xlsx'
  
 # print(datetime.today().strftime("%A"))
 if 'saturday' == datetime.today().strftime("%A").lower():
@@ -44,7 +46,7 @@ else:
 	# nifty_index_data.to_csv('file1.csv')
 	# print(in_1_minute)
 
-	with pd.ExcelWriter("filename.xlsx") as writer:
+	with pd.ExcelWriter(Filename) as writer:
 
 		# use to_excel function and specify the sheet_name and index
 		# to store the dataframe in specified sheet
@@ -63,7 +65,7 @@ else:
 		in_monthly.to_excel(writer, sheet_name="in_monthly")
 
 	# upload file
-	file = m.upload(f'{today}.xlsx')
+	file = m.upload(Filename)
 	m.get_upload_link(file)
 
 	print('Done')
