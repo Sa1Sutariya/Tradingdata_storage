@@ -27,7 +27,7 @@ pip install -r requirements.txt
 
 3. Run the script to gather and store data
 ```python
-python Stock data scrapping.py 
+python Stock_data_scrapping.py 
 ```
 
 The data can then be retrieved and used for further analysis or visualization.
