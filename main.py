@@ -8,6 +8,7 @@ import string
 import pandas as pd
 from websocket import create_connection
 import requests
+from bs4 import BeautifulSoup
 import json
 
 logger = logging.getLogger(__name__)
@@ -28,6 +29,213 @@ class Interval(enum.Enum):
     in_weekly = "1W"
     in_monthly = "1M"
 
+def News_data_Gether():
+    # Make a request to the Moneycontrol website and parse the HTML content
+    url = "https://www.moneycontrol.com/indian-indices/bank-nifty-23.html"
+    Main_page = requests.get(url)
+    Main_page_soup = BeautifulSoup(Main_page.content, "html.parser")
+
+    try:
+        # Find the "See More" link and extract the href attribute
+        link_for_see_more = Main_page_soup.find_all(
+            "a", onclick="javascript:GAtabevent('See More','Market Live');", href=True)
+        link_for_see_more = str(link_for_see_more[0])
+        link_for_see_more_split = link_for_see_more.split('"')
+    except:
+        print("Not Found see more")
+    # Find the index of the 'href=' string in the list
+    Incre_ = 0
+    for c in link_for_see_more_split:
+        Incre_ += 1
+        if " href=" == c:
+            break
+
+    # Construct the full URL of the page containing the data
+    main_url = "https://www.moneycontrol.com"
+    News_url = main_url + link_for_see_more_split[Incre_]
+
+    # Make a request to the page and parse the HTML content
+    News_page = requests.get(News_url)
+    News_page_soup = BeautifulSoup(News_page.content, "html.parser")
+
+    # Find the value of the 'tag_uri' input element and store it in a variable
+    Data_for_date_id = News_page_soup.find("input", {"id": "tag_uri"}).get("value")
+
+    # Construct the URL of the API endpoint that provides the data
+    date_url = "https://liveblogapi.nw18.com/follow/web/getLiveBlogJson.php?tag=" + \
+        Data_for_date_id + "&p=mc"
+
+    # Make a request to the API endpoint and store the response
+    Final_page = requests.get(date_url)
+    Final_page_data = Final_page.text
+
+    # Strip the parentheses from the response and load the JSON data
+    Final_page_data = Final_page_data.lstrip("(")
+    Final_page_data = Final_page_data.rstrip(")")
+    Final_page_data_in_json = json.loads(Final_page_data)
+
+    # Construct the URL of the API endpoint that provides the data for a specific time period
+    front_URL = "https://liveblogapi.nw18.com/follow/web/getLiveBlogJson.php?tag=" + Data_for_date_id + \
+        "&d=&classic=classic&p=mc&page=1&time=" + \
+        Final_page_data_in_json["data"][0]["time"] + \
+        "&d=pre&count=300&crossdomain=true"
+
+    # print(front_URL)
+    # Make a request to the API endpoint and store the response
+    front_page = requests.get(front_URL)
+    front_page_data = front_page.text
+
+    # Strip the parentheses from the response and load the JSON data
+    front_page_data = front_page_data.lstrip("(")
+    front_page_data = front_page_data.rstrip(")")
+    front_page_data_in_json = json.loads(front_page_data)
+
+    # Initialize lists to store data
+    time = []
+    content = []
+    data_path = []
+    data_type = []
+    image_path = []
+    source = []
+    title = []
+    author_image = []
+    author_name = []
+    sticky = []
+    type = []
+    url = []
+
+    # Loop through each data entry in front_page_data_in_json
+    for i in range(front_page_data_in_json["count"]["count"]):
+        # Check if the "source" field is present and append the value or "null" if not
+        try:
+            if not front_page_data_in_json["data"][i]["post"]["source"]:
+                source.append("null")
+            else:
+                source.append(front_page_data_in_json["data"][i]["post"]["source"])
+        except:
+            source.append("null")
+
+        try:    
+            # Check if the "content" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["post"]["content"]:
+                content.append("null")
+            else:
+                content.append(front_page_data_in_json["data"][i]["post"]["content"])
+        except:
+            content.append("null")
+
+        try:    
+            # Check if the "data_path" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["post"]["data_path"]:
+                data_path.append("null")
+            else:
+                data_path.append(front_page_data_in_json["data"][i]["post"]["data_path"])
+        except:
+            data_path.append("null")
+
+        try:
+            # Check if the "data_type" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["post"]["data_type"]:
+                data_type.append("null")
+            else:
+                data_type.append(
+                    front_page_data_in_json["data"][i]["post"]["data_type"])
+        except:
+            data_type.append("null")
+
+        try:    
+            # Check if the "image_path" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["post"]["image_path"]:
+                image_path.append("null")
+            else:
+                image_path.append(
+                    front_page_data_in_json["data"][i]["post"]["image_path"])
+        except:
+            image_path.append("null")
+
+        try:
+            # Check if the "title" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["post"]["title"]:
+                title.append("null")
+            else:
+                title.append(front_page_data_in_json["data"][i]["post"]["title"])
+        except:
+            title.append("null")
+
+        try:
+            # Check if the "url" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["post"]["url"]:
+                url.append("null")
+            else:
+                url.append(front_page_data_in_json["data"][i]["post"]["url"])
+        except:
+            url.append("null")
+
+        try:    
+            # Check if the "author_image" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["author_image"]:
+                author_image.append("null")
+            else:
+                author_image.append(front_page_data_in_json["data"][i]["author_image"])
+        except:
+            author_image.append("null")
+
+        try:    
+            # Check if the "author_name" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["author_name"]:
+                author_name.append("null")
+            else:
+                author_name.append(front_page_data_in_json["data"][i]["author_name"])
+        except:
+            author_name.append("null")
+
+        try:    
+            # Check if the "sticky" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["sticky"]:
+                sticky.append("null")
+            else:
+                sticky.append(front_page_data_in_json["data"][i]["sticky"])
+        except:
+            sticky.append("null")
+
+        try:    
+            # Check if the "type" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["type"]:
+                type.append("null")
+            else:
+                type.append(front_page_data_in_json["data"][i]["type"])
+        except:
+            type.append("null")
+
+        try:    
+            # Check if the "time" field is present and append the value or "null" if not
+            if not front_page_data_in_json["data"][i]["time"]:
+                time.append("null")
+            else:
+                dt = datetime.datetime.strptime(
+                    front_page_data_in_json["data"][i]["time"], "%Y%m%d%H%M%S")
+                time.append(dt)
+        except:
+            time.append("null")
+
+    Final_data_for_excel = {'time': time, 'content': content, 'data_path': data_path, 'data_type': data_type, 'image_path': image_path,
+                            'source': source, 'title': title, 'author_image': author_image, 'author_name': author_name, 'sticky': sticky, 'type': type, 'url': url}
+
+    df = pd.DataFrame(Final_data_for_excel)
+
+    return df
+
+    # df.to_excel('CarsData1.xlsx', index=False)
+
+    # https://www.moneycontrol.com/news/business/markets/share-market-live-updates-stock-market-today-january-6-latest-news-bse-nse-sensex-nifty-covid-coronavirus-market-live-updates-sgx-nifty-negative-start-fomc-minutes-fed-powell-coal-godrej-consumer-rvnl-9819391.html
+
+    # https://liveblogapi.nw18.com/follow/web/getLiveBlogJson.php?tag=marketlive_jan_06012023_63b77fe6f027c&d=&classic=classic&p=mc&page=1&time=20230106150141&d=pre&count=30&jsonp_callback=callbackjson_normal&crossdomain=true
+
+    # https://liveblogapi.nw18.com/follow/web/getLiveBlogJson.php?tag=marketlive_jan_06012023_63b77fe6f027c&d=&classic=classic&p=mc&page=1&time=20230106161312&count=30&jsonp_callback=callbackjson_normal&crossdomain=true
+
+    # https://liveblogapi.nw18.com/follow/web/getLiveBlogJson.php?timeframe=&tag=marketlive_jan_06012023_63b77fe6f027c&d=&classic=classic&p=mc&page=1&time=20230106161312&count=30&jsonp_callback=callbackjson_normal&crossdomain=true
+
+    # https://liveblogapi.nw18.com/follow/web/getLiveBlogJson.php?tag=marketlive_jan_06012023_63b77fe6f027c&p=mc
 
 class TvDatafeed:
     __sign_in_url = 'https://www.tradingview.com/accounts/signin/'
