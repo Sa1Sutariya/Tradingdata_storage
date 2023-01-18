@@ -8,7 +8,7 @@ This project provides a solution for storing and retrieving historical stock mar
 
 Python 3.x
 pip
-MongoDB (for storing the data)
+mega.py (for storing the data)
 
 ## Installation
 
@@ -16,7 +16,7 @@ MongoDB (for storing the data)
 
 ```python 
 git clone
-https://github.com/[username]/tradingdata-storage-stockmarket-webscraping.git 
+https://github.com/Sa1Sutariya/Tradingdata_storage.git
 ```
 
 2. Install the requirements
@@ -25,27 +25,9 @@ https://github.com/[username]/tradingdata-storage-stockmarket-webscraping.git
 pip install -r requirements.txt 
 ```
 
-3. Start MongoDB
-
-```python 
-mongod 
-```
-4. Run the script to gather and store data
+3. Run the script to gather and store data
 ```python
-python gather_data.py 
-```
-
-## Usage
-
-The script gather_data.py can be used to gather data for specific stock symbols and store it in the MongoDB database. The script takes the following arguments:
-
--s or --symbols: a comma-separated list of stock symbols to gather data for
-
--d or --days: the number of days of historical data to gather (default is 30)
-
-Example:
-```python
-python gather_data.py -s "AAPL,GOOG,MSFT" -d 90 
+python Stock data scrapping.py 
 ```
 
 The data can then be retrieved and used for further analysis or visualization.
@@ -55,6 +37,8 @@ The data can then be retrieved and used for further analysis or visualization.
 Python - Programming language
 
 requests - HTTP library
+
+websocket - library for building WebSocket servers
 
 Mega - store excel file
 
