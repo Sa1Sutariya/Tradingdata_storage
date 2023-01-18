@@ -34,17 +34,17 @@ The data can then be retrieved and used for further analysis or visualization.
 
 ## Built With
 
-Python - Programming language
+[Python](https://www.python.org/) - Programming language
 
-requests - HTTP library
+[requests](https://pypi.org/project/requests/) - HTTP library
 
-websocket - library for building WebSocket servers
+[websocket](https://pypi.org/project/websocket-client/) - library for building WebSocket servers
 
-Mega - store excel file
+[Mega](https://pypi.org/project/mega.py/) - store excel file
 
-pandas - Data manipulation library
+[pandas](https://pypi.org/project/pandas/) - Data manipulation library
 
-beautifulsoup4 - Web scraping library
+[beautifulsoup4](https://pypi.org/project/BeautifulSoup/) - Web scraping library
 
 ## Contributing
 
@@ -60,4 +60,4 @@ This project is licensed under the MIT License
 
 ## Acknowledgments
 
-Data source: Tradingview data
+Data source: [Tradingview data](https://in.tradingview.com/)
