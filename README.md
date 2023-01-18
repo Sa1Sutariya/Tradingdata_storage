@@ -6,8 +6,8 @@ This project provides a solution for storing and retrieving historical stock mar
 
 ### Prerequisites
 
-Python 3.x
-pip
+Python 3.x\
+pip\
 mega.py (for storing the data)
 
 ## Installation
