@@ -2,43 +2,40 @@
 
 This project provides a solution for storing and retrieving historical stock market data, as well as a web scraping tool for gathering the data in the first place.
 
-Getting Started
+## Getting Started
 
-Prerequisites
+### Prerequisites
 
 Python 3.x
-
 pip
-
 MongoDB (for storing the data)
 
-Installation
+## Installation
 
-Clone the repository
+1. Clone the repository
 
-Copy code
+```python 
+git clone
+https://github.com/[username]/tradingdata-storage-stockmarket-webscraping.git 
+```
 
-git clone https://github.com/[username]/tradingdata-storage-stockmarket-webscraping.git 
+2. Install the requirements
 
-Install the requirements
-
-Copy code
-
+```python 
 pip install -r requirements.txt 
+```
 
-Start MongoDB
+3. Start MongoDB
 
-Copy code
-
+```python 
 mongod 
-
-Run the script to gather and store data
-
-Copy code
-
+```
+4. Run the script to gather and store data
+```python
 python gather_data.py 
+```
 
-Usage
+## Usage
 
 The script gather_data.py can be used to gather data for specific stock symbols and store it in the MongoDB database. The script takes the following arguments:
 
@@ -47,10 +44,36 @@ The script gather_data.py can be used to gather data for specific stock symbols 
 -d or --days: the number of days of historical data to gather (default is 30)
 
 Example:
-
-Copy code
-
+```python
 python gather_data.py -s "AAPL,GOOG,MSFT" -d 90 
+```
 
 The data can then be retrieved and used for further analysis or visualization.
 
+## Built With
+
+Python - Programming language
+
+requests - HTTP library
+
+Mega - store excel file
+
+pandas - Data manipulation library
+
+beautifulsoup4 - Web scraping library
+
+## Contributing
+
+If you want to contribute, please submit a pull request.
+
+## Author
+
+Savan Sutariya
+
+## License
+
+This project is licensed under the MIT License
+
+## Acknowledgments
+
+Data source: Tradingview data
