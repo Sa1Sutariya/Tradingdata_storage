@@ -26,16 +26,16 @@ elif 'sunday' == datetime.today().strftime("%A").lower():
 else:
 	pass
 	# Mega login email and password
-email = 'jeyav78908@vpsrec.com'
-password = "Akki@123"
+email = '' # Write Your Mega Login Email
+password = '' # Write Your Mega Login Password
 
 # Login to Mega
 m = mega.login(email, password)
 print('Login Mega')
 
 # Tradingview username and password
-username = 'xcmbvcxmvx'
-password = 'Akki@123'
+username = '' # Write Your Tradingview Login Username
+password = '' # Write Your Tradingview Login Password
 
 # Initialize TvDatafeed with given username and password
 tv = TvDatafeed(username=username, password=password)
